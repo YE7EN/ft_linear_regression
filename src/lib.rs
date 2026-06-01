@@ -86,6 +86,27 @@ pub fn train(data: &[DataPoint], learning_rate: f64, iterations: usize) -> (f64,
         (denorm_theta0, denorm_theta1)
 }
 
+
+pub fn precision(data: &[DataPoint], theta0: f64, theta1: f64) -> (f64, f64) {
+    let m = data.len() as f64;
+
+    let mean_price = data.iter().map(|p| p.price).sum::<f64>() / m;
+
+    let mut ss_res = 0.0;
+    let mut ss_tot = 0.0;
+
+    for p in data {
+        let predicted = estimate_price(p.mileage, theta0, theta1);
+        ss_res += (p.price - predicted).powi(2);
+        ss_tot += (p.price - mean_price).powi(2);
+    }
+
+    let r_squared = 1.0 - (ss_res / ss_tot);
+    let mse = ss_res / m;
+
+    (r_squared, mse)
+}
+
 pub fn save_thetas(path: &str, theta0: f64, theta1: f64) -> std::io::Result<()> {
     fs::write(path, format!("{},{}", theta0, theta1))
 }
