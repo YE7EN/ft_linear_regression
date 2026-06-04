@@ -59,14 +59,6 @@ We use f64 over f32 (32-bit) for precision - the gradient descent calculations a
 
 
 
-
-
-
-
-
-
-
-
 load_dataset - reading the CSV
 
 pub fn load_dataset(path: &str) -> Result<Vec<DataPoint>, Box<dyn Error>> {
@@ -531,4 +523,68 @@ raw data (km: 20000-240000)
             nudge theta0 and theta1 toward less error
     ↓ denormalize thetas back to raw km scale
 return (theta0, theta1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+src/bin/train.rs
+
+```rust
+use ft_linear_regression::{load_dataset, train, save_thetas};
+
+fn main() {
+    let data = load_dataset("data.csv").except("Failed to load dataset");
+    println!("Loaded {} data points", data.len());
+
+    let learning_rate = 0.1;
+    let iterations = 1000;
+
+    let (theta0, theta1) = train(&data, learning_rate, iterations);
+
+    println!("Training done.");
+    println!("theta0 = {}", theta0);
+    println!("theta1 = {}", theta1);
+
+    save_thetas("thetas.txt", theta0, theta1).except("Failed to save thetas");
+    println!("Thetas saved to thetas.txt");
+}
+```
+
+This is the simplest binary - it just calls the functions from lib.rs in the right orders.
+
+```rust
+use ft_linear_regression::{load_dataset, train, save_thetas}
+```
+
+This imports three functions from your library. The ft_linear_regression name comes directly from your Cargo.toml
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
