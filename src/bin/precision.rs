@@ -1,7 +1,15 @@
 use ft_linear_regression::{load_dataset, load_thetas, precision};
 
 fn main() {
-    let data = load_dataset("data.csv").expect("Failed to load dataset");
+    let data = match load_dataset("data.csv") {
+        Ok(d) => d,
+        Err(_) => {
+            eprintln!("Error: could not load data.csv");
+            eprintln!("Make sure data.csv is in the current directory.");
+            return;
+        }
+    };
+
     let (theta0, theta1) = load_thetas("thetas.txt");
 
     if theta0 == 0.0 && theta1 == 0.0 {

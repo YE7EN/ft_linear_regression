@@ -10,7 +10,13 @@ fn main()
     io::stdout().flush().unwrap();
 
     let mut input = String::new();
-    io::stdin().read_line(&mut input).expect("Failed to read input");
+    match io::stdin().read_line(&mut input) {
+        Ok(_) => {},
+        Err(_) =>{
+            eprintln!("Error: could not read input");
+            return;
+        }
+    };
 
     let mileage: f64 = match input.trim().parse()
     {

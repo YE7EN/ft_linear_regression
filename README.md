@@ -1,0 +1,96 @@
+# ft_linear_regression
+
+A simple linear regression program built **from scratch in Rust** — no machine learning libraries. It predicts the price of a car based on its mileage, using gradient descent to train the model.
+
+This is a 42 School project, implemented in Rust as a way to learn both the mathematics behind linear regression and the language itself.
+
+## Overview
+
+The program is split into separate binaries:
+
+- **`train`** — reads the dataset, runs gradient descent, and saves the learned parameters (θ₀ and θ₁).
+- **`predict`** — takes a mileage as input and returns the estimated price using the trained parameters.
+- **`precision`** *(bonus)* — evaluates the accuracy of the model (R² coefficient).
+- **`plot`** *(bonus)* — visualizes the data points and the resulting regression line.
+
+The core logic lives in a shared library (`lib.rs`); each binary is a thin entry point that calls into it.
+
+## How it works
+
+The model estimates price with the hypothesis:
+
+```
+estimatePrice(mileage) = θ₀ + (θ₁ × mileage)
+```
+
+Training adjusts θ₀ and θ₁ by **gradient descent**, minimizing the error between predicted and actual prices over the dataset. The two parameters are updated **simultaneously** on each iteration. Input data is **normalized** before training to keep gradient descent stable and well-scaled, then the parameters are de-normalized for use in prediction.
+
+## Requirements
+
+- [Rust](https://www.rust-lang.org/tools/install) (stable toolchain, via `rustup`)
+- Cargo (installed with Rust)
+
+## Usage
+
+Clone the repository and build:
+
+```bash
+git clone https://github.com/<your-username>/ft_linear_regression.git
+cd ft_linear_regression
+cargo build --release
+```
+
+Train the model on the dataset:
+
+```bash
+cargo run --bin train
+```
+
+This produces a file containing the trained parameters (θ₀ and θ₁).
+
+Predict a price for a given mileage:
+
+```bash
+cargo run --bin predict
+```
+
+You'll be prompted to enter a mileage, and the program returns the estimated price. Before training, the model returns 0 (parameters initialized to zero).
+
+Check the model's precision (bonus):
+
+```bash
+cargo run --bin precision
+```
+
+Plot the data and regression line (bonus):
+
+```bash
+cargo run --bin plot
+```
+
+## Project structure
+
+```
+ft_linear_regression/
+├── Cargo.toml
+├── data.csv            # dataset (mileage, price)
+├── src/
+│   ├── lib.rs          # core logic: training, prediction, normalization, R²
+│   └── bin/
+│       ├── train.rs
+│       ├── predict.rs
+│       ├── precision.rs
+│       └── plot.rs
+└── README.md
+```
+
+## What I learned
+
+- Implementing **gradient descent** and linear regression from first principles, without ML libraries.
+- Why **feature normalization** matters for stable training, and how to de-normalize parameters afterward.
+- Idiomatic **Rust**: ownership and borrowing, the `Result` type, error handling with `match`, iterators, and closures.
+- Structuring a Cargo project with a **shared library and multiple binaries**.
+
+## License
+
+This project was completed as part of the 42 School curriculum.
