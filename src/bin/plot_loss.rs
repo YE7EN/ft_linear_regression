@@ -1,9 +1,14 @@
 use plotters::prelude::*;
 
 fn main() {
-    let content = std::fs::read_to_string("costs.txt")
-        .expect("Could not read costs.txt — run train first");
-
+    let content = match std::fs::read_to_string("costs.txt") {
+    Ok(c) => c,
+    Err(_) => {
+        println!("Could not read costs.txt — run train first");
+        return;
+    }
+};
+    
     let costs: Vec<f64> = content
         .lines()
         .filter_map(|line| line.parse().ok())
