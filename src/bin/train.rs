@@ -15,7 +15,11 @@ fn main() {
     let learning_rate = 0.1;
     let iterations = 1000;
 
-    let (theta0, theta1) = train(&data, learning_rate, iterations);
+    let (theta0, theta1, costs) = train(&data, learning_rate, iterations);
+
+    let costs_str: Vec<String> = costs.iter().map(|c| c.to_string()).collect();
+    std::fs::write("costs.txt", costs_str.join("\n")).expect("Failed to save costs");
+    println!("Costs saved to costs.txt");
 
     println!("Training done.");
     println!("theta0 = {}", theta0);

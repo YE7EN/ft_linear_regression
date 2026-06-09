@@ -49,7 +49,7 @@ pub fn load_thetas(path: &str) -> (f64, f64)
 }
 
 
-pub fn train(data: &[DataPoint], learning_rate: f64, iterations: usize) -> (f64, f64) {
+pub fn train(data: &[DataPoint], learning_rate: f64, iterations: usize) -> (f64, f64, Vec<f64>) {
     let m = data.len() as f64;
 
     let km_min = data.iter().map(|p| p.mileage).fold(f64::INFINITY, f64::min);
@@ -62,16 +62,21 @@ pub fn train(data: &[DataPoint], learning_rate: f64, iterations: usize) -> (f64,
 
         let mut theta0 = 0.0;
         let mut theta1 = 0.0;
+        let mut costs: Vec<f64> = Vec::new();
 
         for _ in 0..iterations {
             let mut sum0 = 0.0;
             let mut sum1 = 0.0;
+            let mut cost = 0.0;
 
             for &(km, price) in &normalized {
                 let error = estimate_price(km, theta0, theta1) - price;
                 sum0 += error;
                 sum1 += error * km;
+                cost += error * error;
             }
+
+            costs.push(cost / (2.0 * m));
 
             let tmp0 = learning_rate * (sum0 / m);
             let tmp1 = learning_rate * (sum1 / m);
@@ -83,7 +88,7 @@ pub fn train(data: &[DataPoint], learning_rate: f64, iterations: usize) -> (f64,
         let denorm_theta1 = theta1 / (km_max - km_min);
         let denorm_theta0 = theta0 - theta1 * km_min / (km_max - km_min);
 
-        (denorm_theta0, denorm_theta1)
+        (denorm_theta0, denorm_theta1, costs)
 }
 
 

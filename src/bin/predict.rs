@@ -5,6 +5,7 @@ use ft_linear_regression::{estimate_price, load_thetas};
 fn main()
 {
     let (theta0, theta1) = load_thetas("thetas.txt");
+    println!("Model loaded: theta0 = {:.2}, theta1 = {:.6}", theta0, theta1);
 
     print!("Enter a mileage: ");
     io::stdout().flush().unwrap();
